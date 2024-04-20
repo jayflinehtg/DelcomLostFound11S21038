@@ -26,7 +26,7 @@
             android:layout_marginTop="32dp"
             android:background="@color/white"
             android:padding="15dp"
-            app:srcCompat="@drawable/ic_person" />
+            android:src="@drawable/fotoku" />
         <TextView
             android:id="@+id/tvProfileName"
             android:layout_width="wrap_content"
