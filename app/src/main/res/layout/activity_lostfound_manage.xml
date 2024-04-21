@@ -20,7 +20,7 @@
             android:background="#4e136e"
             app:navigationIcon="@drawable/ic_arrow_back_24"
             app:navigationIconTint="@color/white"
-            app:title="Tambah Barang Temuan"
+            app:title="Tambah Item Lost &amp; Found"
             app:titleTextColor="@color/white" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -128,7 +128,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:backgroundTint="#631FC6"
+                android:backgroundTint="#4e136e"
                 android:text="Simpan"
                 android:textSize="14sp"
                 app:cornerRadius="2pt"
