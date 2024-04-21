@@ -16,8 +16,7 @@ import com.ifs18005.delcomtodo.data.remote.response.LostFoundsItemResponse
 import com.ifs21038.lostfounds.databinding.ItemRowLostfoundBinding
 
 class LostFoundsAdapter :
-    ListAdapter<LostFoundsItemResponse,
-            LostFoundsAdapter.MyViewHolder>(DIFF_CALLBACK) {
+    ListAdapter<LostFoundsItemResponse, LostFoundsAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
     private var originalData = mutableListOf<LostFoundsItemResponse>()
@@ -123,8 +122,8 @@ class LostFoundsAdapter :
     }
 
     interface OnItemClickCallback {
-        fun onCheckedChangeListener(todo: LostFoundsItemResponse, isChecked: Boolean)
-        fun onClickDetailListener(todoId: Int)
+        fun onCheckedChangeListener(lostfound: LostFoundsItemResponse, isChecked: Boolean)
+        fun onClickDetailListener(lostfoundId: Int)
     }
 
     companion object {
