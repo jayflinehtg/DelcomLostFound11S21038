@@ -20,7 +20,7 @@
             app:showAsAction="never" />
         <item
             android:id="@+id/mainMenuFavoriteTodos"
-            android:title="Favorite LostFounds"
+            android:title="Favorite Lost &amp; Found"
             app:showAsAction="never" />
     </group>
 </menu>

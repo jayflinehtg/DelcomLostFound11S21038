@@ -253,7 +253,7 @@ class MainActivity : AppCompatActivity() {
                         this@MainActivity,
                         LostFoundDetailActivity::class.java
                     )
-                    intent.putExtra(LostFoundDetailActivity.KEY_TODO_ID, lostfoundId)
+                    intent.putExtra(LostFoundDetailActivity.KEY_LOST_FOUND_ID, lostfoundId)
                     launcher.launch(intent)
                 }
             })

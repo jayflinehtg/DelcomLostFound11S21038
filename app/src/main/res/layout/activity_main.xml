@@ -19,7 +19,7 @@
             android:id="@+id/appbarMain"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#631FC6"
+            android:background="#4e136e"
             app:menu="@menu/main_menu"
             app:title="@string/app_name"
             app:titleTextColor="@color/white" />
@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        app:backgroundTint="#0188A4"
+        app:backgroundTint="#4e136e"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_24"

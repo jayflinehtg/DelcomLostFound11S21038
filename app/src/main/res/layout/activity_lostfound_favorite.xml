@@ -19,7 +19,7 @@
             android:id="@+id/appbarLostFoundFavorite"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#631FC6"
+            android:background="#4e136e"
             app:navigationIcon="@drawable/ic_arrow_back_24"
             app:navigationIconTint="@color/white"
             app:title="LostFound Favorite"
