@@ -38,7 +38,7 @@ class LostFoundRepository private constructor(
     }
 
     fun putLostFound(
-        lostFoundId: Int,
+        lostfoundId: Int,
         title: String,
         description: String,
         status: String,
@@ -50,7 +50,7 @@ class LostFoundRepository private constructor(
             emit(
                 MyResult.Success(
                     apiService.putLostFound(
-                        lostFoundId,
+                        lostfoundId,
                         title,
                         description,
                         status,
@@ -94,12 +94,12 @@ class LostFoundRepository private constructor(
     }
 
     fun getDetail(
-        lostFoundId: Int,
+        lostfoundId: Int,
     ) = flow {
         emit(MyResult.Loading)
         try {
             //get success message
-            emit(MyResult.Success(apiService.getDetail(lostFoundId)))
+            emit(MyResult.Success(apiService.getDetail(lostfoundId)))
         } catch (e: HttpException) {
             //get error message
             val jsonInString = e.response()?.errorBody()?.string()
@@ -114,12 +114,12 @@ class LostFoundRepository private constructor(
     }
 
     fun delete(
-        lostFoundId: Int,
+        lostfoundId: Int,
     ) = flow {
         emit(MyResult.Loading)
         try {
             //get success message
-            emit(MyResult.Success(apiService.delete(lostFoundId)))
+            emit(MyResult.Success(apiService.delete(lostfoundId)))
         } catch (e: HttpException) {
             //get error message
             val jsonInString = e.response()?.errorBody()?.string()
