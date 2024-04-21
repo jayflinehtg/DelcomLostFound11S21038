@@ -171,7 +171,7 @@ class LostFoundDetailActivity : AppCompatActivity() {
                         .setMessage("Anda yakin ingin menghapus Item ini?")
 
                     builder.setPositiveButton("Ya") { _, _ ->
-                        observeDelete(todo.id)
+                        observeDeleteLostFound(todo.id)
                     }
 
                     builder.setNegativeButton("Tidak") { dialog, _ ->
@@ -217,37 +217,43 @@ class LostFoundDetailActivity : AppCompatActivity() {
         return spannableString
     }
 
-    private fun observeDelete(todoId: Int) {
+    private fun observeDeleteLostFound(lostfoundId: Int) {
         showComponent(false)
         showLoading(true)
-        viewModel.delete(todoId).observeOnce {
-            when (it) {
-                is MyResult.Error -> {
-                    showComponent(true)
-                    showLoading(false)
-                    Toast.makeText(
-                        this@LostFoundDetailActivity,
-                        "Gagal menghapus item: ${it.error}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+        viewModel.deleteLostFound(lostfoundId).observeOnce { result ->
+            result?.let {
+                when (it) {
+                    is MyResult.Error -> {
+                        showComponent(true)
+                        showLoading(false)
+                        Toast.makeText(
+                            this@LostFoundDetailActivity,
+                            "Gagal menghapus barang: ${it.error}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    is MyResult.Success -> {
+                        showLoading(false)
+
+                        Toast.makeText(
+                            this@LostFoundDetailActivity,
+                            "Berhasil menghapus barang",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        viewModel.getLocalLostFound(lostfoundId).observeOnce {
+                            if(it != null){
+                                viewModel.deleteLocalLostFound(it)
+                            }
+                        }
+                        val resultIntent = Intent()
+                        resultIntent.putExtra(KEY_IS_CHANGED, true)
+                        setResult(RESULT_CODE, resultIntent)
+                        finishAfterTransition()
+                    }
+
+                    else -> {}
                 }
-
-                is MyResult.Success -> {
-                    showLoading(false)
-
-                    Toast.makeText(
-                        this@LostFoundDetailActivity,
-                        "Berhasil menghapus item",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    val resultIntent = Intent()
-                    resultIntent.putExtra(KEY_IS_CHANGED, true)
-                    setResult(RESULT_CODE, resultIntent)
-                    finishAfterTransition()
-                }
-
-                else -> {}
             }
         }
     }

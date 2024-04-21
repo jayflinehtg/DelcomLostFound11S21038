@@ -1,29 +1,28 @@
 package com.ifs21038.lostfounds.presentation.lostfound
 
+import com.ifs21038.lostfounds.R
+import com.ifs21038.lostfounds.adapter.LostFoundsAdapter
+import com.ifs21038.lostfounds.data.local.entity.DelcomLostFoundEntity
+import com.ifs21038.lostfounds.data.remote.MyResult
+import com.ifs21038.lostfounds.helper.Utils.Companion.entitiesToResponses
+import com.ifs21038.lostfounds.presentation.ViewModelFactory
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ifs18005.delcomtodo.data.remote.response.LostFoundsItemResponse
-
-import com.ifs21038.lostfounds.R
-import com.ifs21038.lostfounds.adapter.LostFoundsAdapter
-import com.ifs21038.lostfounds.data.local.entity.DelcomLostFoundEntity
-import com.ifs21038.lostfounds.data.remote.MyResult
-import com.ifs21038.lostfounds.databinding.ActivityLostfoundFavoriteBinding
-import com.ifs21038.lostfounds.helper.Utils.Companion.entitiesToResponses
 import com.ifs21038.lostfounds.helper.Utils.Companion.observeOnce
-import com.ifs21038.lostfounds.presentation.ViewModelFactory
+
 
 class LostFoundFavoriteActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityLostfoundFavoriteBinding
+    private lateinit var binding: ActivityLostFoundFavoriteBinding
     private val viewModel by viewModels<LostFoundViewModel> {
         ViewModelFactory.getInstance(this)
     }
@@ -42,15 +41,17 @@ class LostFoundFavoriteActivity : AppCompatActivity() {
             }
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLostfoundFavoriteBinding.inflate(layoutInflater)
+        binding = ActivityLostFoundFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupView()
         setupAction()
     }
+
     private fun setupAction() {
-        binding.appbarTodoFavorite.setNavigationOnClickListener {
+        binding.appbarLostFoundFavorite.setNavigationOnClickListener {
             val resultIntent = Intent()
             resultIntent.putExtra(LostFoundDetailActivity.KEY_IS_CHANGED, true)
             setResult(LostFoundDetailActivity.RESULT_CODE, resultIntent)
@@ -61,54 +62,58 @@ class LostFoundFavoriteActivity : AppCompatActivity() {
         showComponentNotEmpty(false)
         showEmptyError(false)
         showLoading(true)
-        binding.appbarTodoFavorite.overflowIcon =
+        binding.appbarLostFoundFavorite.overflowIcon =
             ContextCompat
                 .getDrawable(this, R.drawable.ic_more_vert_24)
-        observeGetTodos()
+        observeGetLostFounds()
     }
-    private fun observeGetTodos() {
-        viewModel.getLocalTodos().observe(this) { todos ->
-            loadTodosToLayout(todos)
+    private fun observeGetLostFounds() {
+        viewModel.getLocalLostFounds().observe(this) { lostfounds ->
+            loadLostFoundsToLayout(lostfounds)
         }
     }
-    private fun loadTodosToLayout(todos: List<DelcomLostFoundEntity>?) {
+    private fun loadLostFoundsToLayout(lostfounds: List<DelcomLostFoundEntity>?) {
         showLoading(false)
         val layoutManager = LinearLayoutManager(this)
-        binding.rvTodoFavoriteTodos.layoutManager = layoutManager
+        binding.rvLostFoundFavoriteLostFounds.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(
             this,
             layoutManager.orientation
         )
-        binding.rvTodoFavoriteTodos.addItemDecoration(itemDecoration)
-        if (todos.isNullOrEmpty()) {
+        binding.rvLostFoundFavoriteLostFounds.addItemDecoration(itemDecoration)
+        if (lostfounds.isNullOrEmpty()) {
             showEmptyError(true)
-            binding.rvTodoFavoriteTodos.adapter = null
+            binding.rvLostFoundFavoriteLostFounds.adapter = null
         } else {
             showComponentNotEmpty(true)
             showEmptyError(false)
             val adapter = LostFoundsAdapter()
-            adapter.submitOriginalList(entitiesToResponses(todos))
-            binding.rvTodoFavoriteTodos.adapter = adapter
+            adapter.submitOriginalList(entitiesToResponses(lostfounds))
+            binding.rvLostFoundFavoriteLostFounds.adapter = adapter
             adapter.setOnItemClickCallback(
                 object : LostFoundsAdapter.OnItemClickCallback {
                     override fun onCheckedChangeListener(
-                        todo: LostFoundsItemResponse,
+                        lostfound: LostFoundsItemResponse,
                         isChecked: Boolean
                     ) {
-                        adapter.filter(binding.svTodoFavorite.query.toString())
-                        val newTodo = DelcomLostFoundEntity(
-                            id = todo.id,
-                            title = todo.title,
-                            description = todo.description,
-                            isFinished = todo.isCompleted,
-                            cover = todo.cover,
-                            createdAt = todo.createdAt,
-                            updatedAt = todo.updatedAt,
+                        adapter.filter(binding.svLostFoundFavorite.query.toString())
+                        val newLostFound = DelcomLostFoundEntity(
+                            id = lostfound.id,
+                            title = lostfound.title,
+                            description = lostfound.description,
+                            isCompleted = lostfound.isCompleted, // Sesuaikan dengan isCompleted
+                            cover = lostfound.cover,
+                            createdAt = lostfound.createdAt,
+                            updatedAt = lostfound.updatedAt,
+                            status = "", // Sesuaikan dengan nilai default untuk status
+                            userId = 0 // Sesuaikan dengan nilai default untuk userId
                         )
+
                         viewModel.putLostFound(
-                            todo.id,
-                            todo.title,
-                            todo.description,
+                            lostfound.id,
+                            lostfound.title,
+                            lostfound.description,
+                            lostfound.status,
                             isChecked
                         ).observeOnce {
                             when (it) {
@@ -116,13 +121,13 @@ class LostFoundFavoriteActivity : AppCompatActivity() {
                                     if (isChecked) {
                                         Toast.makeText(
                                             this@LostFoundFavoriteActivity,
-                                            "Gagal menyelesaikan todo: " + todo.title,
+                                            "Gagal menyelesaikan LostFound: " + lostfound.title,
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     } else {
                                         Toast.makeText(
                                             this@LostFoundFavoriteActivity,
-                                            "Gagal batal menyelesaikan todo: " + todo.title,
+                                            "Gagal batal menyelesaikan LostFound: " + lostfound.title,
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
@@ -131,39 +136,39 @@ class LostFoundFavoriteActivity : AppCompatActivity() {
                                     if (isChecked) {
                                         Toast.makeText(
                                             this@LostFoundFavoriteActivity,
-                                            "Berhasil menyelesaikan todo: " + todo.title,
+                                            "Berhasil menyelesaikan LostFound: " + lostfound.title,
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     } else {
                                         Toast.makeText(
                                             this@LostFoundFavoriteActivity,
-                                            "Berhasil batal menyelesaikan todo: " + todo.title,
+                                            "Berhasil batal menyelesaikan lostfound: " + lostfound.title,
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
-                                    viewModel.insertLocalTodo(newTodo)
+                                    viewModel.insertLocalLostFound(newLostFound)
                                 }
                                 else -> {}
                             }
                         }
                     }
-                    override fun onClickDetailListener(todoId: Int) {
+                    override fun onClickDetailListener(lostfoundId: Int) {
                         val intent = Intent(
                             this@LostFoundFavoriteActivity,
                             LostFoundDetailActivity::class.java
                         )
-                        intent.putExtra(LostFoundDetailActivity.KEY_TODO_ID, todoId)
+                        intent.putExtra(LostFoundDetailActivity.KEY_LOST_FOUND_ID, lostfoundId)
                         launcher.launch(intent)
                     }
                 })
-            binding.svTodoFavorite.setOnQueryTextListener(
+            binding.svLostFoundFavorite.setOnQueryTextListener(
                 object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String): Boolean {
                         return false
                     }
                     override fun onQueryTextChange(newText: String): Boolean {
                         adapter.filter(newText)
-                        binding.rvTodoFavoriteTodos
+                        binding.rvLostFoundFavoriteLostFounds
                             .layoutManager?.scrollToPosition(0)
 
                         return true
@@ -173,17 +178,18 @@ class LostFoundFavoriteActivity : AppCompatActivity() {
     }
 
     private fun showComponentNotEmpty(status: Boolean) {
-        binding.svTodoFavorite.visibility =
+        binding.svLostFoundFavorite.visibility =
             if (status) View.VISIBLE else View.GONE
-        binding.rvTodoFavoriteTodos.visibility =
+        binding.rvLostFoundFavoriteLostFounds.visibility =
             if (status) View.VISIBLE else View.GONE
     }
     private fun showEmptyError(isError: Boolean) {
-        binding.tvTodoFavoriteEmptyError.visibility =
+        binding.tvLostFoundFavoriteEmptyError.visibility =
             if (isError) View.VISIBLE else View.GONE
     }
     private fun showLoading(isLoading: Boolean) {
-        binding.pbTodoFavorite.visibility =
+        binding.pbLostFoundFavorite.visibility =
             if (isLoading) View.VISIBLE else View.GONE
     }
+
 }
