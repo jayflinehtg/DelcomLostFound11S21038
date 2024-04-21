@@ -13,11 +13,9 @@ interface IDelcomLostFoundDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(delcomTodo: DelcomLostFoundEntity)
     @Delete
-    fun delete(delcomTodo: DelcomLostFoundEntity)
-    @Query("SELECT * FROM delcom_todos WHERE id = :id LIMIT 1")
+    fun delete(delcomLostFound: DelcomLostFoundEntity)
+    @Query("SELECT * FROM delcom_lostfounds WHERE id = :id LIMIT 1")
     fun get(id: Int): LiveData<DelcomLostFoundEntity?>
-    @Query("SELECT * FROM delcom_todos ORDER BY created_at DESC")
-    fun getAllTodos(): LiveData<List<DelcomLostFoundEntity>?>
-    @Query("SELECT * FROM delcom_todos")
+    @Query("SELECT * FROM delcom_lostfounds ORDER BY created_at DESC")
     fun getAllLostFounds(): LiveData<List<DelcomLostFoundEntity>?>
 }

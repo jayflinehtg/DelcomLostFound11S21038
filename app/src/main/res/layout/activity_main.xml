@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.main.MainActivity">
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbarLayoutMain"
         android:layout_width="match_parent"
@@ -15,17 +14,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible">
+
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/appbarMain"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#4e136e"
+            android:background="#631FC6"
             app:menu="@menu/main_menu"
             app:title="@string/app_name"
             app:titleTextColor="@color/white" />
-
     </com.google.android.material.appbar.AppBarLayout>
-
     <SearchView
         android:id="@+id/svMain"
         android:layout_width="0dp"
@@ -34,15 +32,13 @@
         android:isScrollContainer="false"
         android:keepScreenOn="false"
         android:queryBackground="@null"
-        android:queryHint="Temukan Lost Found..."
+        android:queryHint="Temukan barang..."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appbarLayoutMain"
-        style="@style/Widget.AppCompat.SearchView" >
+        app:layout_constraintTop_toBottomOf="@+id/appbarLayoutMain" >
     </SearchView>
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMainTodos"
+        android:id="@+id/rvMainLostFounds"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -50,20 +46,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/svMain"
         tools:listitem="@layout/item_row_lostfound" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabMainAddTodo"
+        android:id="@+id/fabMainAddLostFound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        app:backgroundTint="#4e136e"
+        app:backgroundTint="#0188A4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_24"
         app:tint="@color/white"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
-
     <ProgressBar
         android:id="@+id/pbMain"
         style="?android:attr/progressBarStyle"
@@ -74,17 +68,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appbarLayoutMain" />
-
     <TextView
         android:id="@+id/tvMainEmptyError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Belum terdapat data!"
+        android:text="Belum terdapat data barang temuan!"
         android:textColor="#E6180D"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appbarLayoutMain" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
