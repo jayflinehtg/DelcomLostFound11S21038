@@ -35,46 +35,26 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingBottom="12dp">
 
-                <ImageView
-                    android:id="@+id/tvLostFoundDetailImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="200sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:srcCompat="@drawable/lostfound" />
-
-                <CheckBox
-                    android:id="@+id/cbLostFoundDetailIsFinished"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="8dp"
-                    android:foregroundGravity="center"
-                    android:scaleX="1"
-                    android:scaleY="1"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/tvLostFoundDetailTitle"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvLostFoundDetailImage" />
-
                 <TextView
                     android:id="@+id/tvLostFoundDetailTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="204dp"
                     android:gravity="center_vertical"
                     android:text="Nama Barang"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/cbLostFoundDetailIsFinished"
-                    app:layout_constraintTop_toBottomOf="@+id/tvLostFoundDetailImage" />
+                    app:layout_constraintTop_toBottomOf="@+id/ivLostFoundDetailCover" />
+
                 <TextView
                     android:id="@+id/tvLostFoundDetailDate"
                     android:layout_width="0dp"
@@ -88,6 +68,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvLostFoundDetailTitle" />
+
                 <TextView
                     android:id="@+id/tvLostFoundDetailDesc"
                     android:layout_width="0dp"
@@ -100,6 +81,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvLostFoundDetailDate" />
+
                 <TextView
                     android:id="@+id/tvLostFoundDetailStatus"
                     android:layout_width="0dp"
@@ -113,6 +95,30 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvLostFoundDetailDesc" />
+
+                <ImageView
+                    android:id="@+id/ivLostFoundDetailCover"
+                    android:layout_width="143dp"
+                    android:layout_height="160dp"
+                    android:layout_marginTop="32dp"
+                    android:background="#F7F8FA"
+                    android:src="@drawable/ic_image_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <CheckBox
+                    android:id="@+id/cbLostFoundDetailIsFinished"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="4dp"
+                    android:scaleX="1"
+                    android:scaleY="1"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ivLostFoundDetailCover"
+                    tools:ignore="TouchTargetSizeCheck" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
@@ -166,5 +172,6 @@
                 tools:ignore="UseAppTint" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
 
 </LinearLayout>
