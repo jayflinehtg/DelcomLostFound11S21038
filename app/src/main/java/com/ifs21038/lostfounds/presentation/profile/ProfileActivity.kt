@@ -6,10 +6,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.ifs18005.delcomtodo.data.remote.response.DataUserResponse
 import com.ifs21038.lostfounds.R
@@ -42,6 +38,9 @@ class ProfileActivity : AppCompatActivity() {
         binding.apply {
             ivProfileBack.setOnClickListener {
                 finish()
+            }
+            btnEditProfile.setOnClickListener {
+                startActivity(Intent(this@ProfileActivity, ProfileManageActivity::class.java))
             }
         }
     }
@@ -79,13 +78,15 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun loadProfileData(profile: DataUserResponse){
         binding.apply {
-
             if(profile.user.photo != null){
-                val urlImg = "https://public-api.delcom.org/${profile.user.photo}"
+                ivProfile.visibility = View.VISIBLE
+
                 Glide.with(this@ProfileActivity)
-                    .load(urlImg)
+                    .load("https://public-api.delcom.org/" + profile.user.photo)
                     .placeholder(R.drawable.ic_person)
                     .into(ivProfile)
+            }else{
+                ivProfile.visibility = View.GONE
             }
 
             tvProfileName.text = profile.user.name

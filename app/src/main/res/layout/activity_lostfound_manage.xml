@@ -77,22 +77,31 @@
 
             <ImageView
                 android:id="@+id/ivSelectedImage"
-                android:layout_width="wrap_content"
-                android:layout_height="200sp"
+                android:layout_width="281dp"
+                android:layout_height="192dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etLostFoundManageStatus"
-                tools:srcCompat="@drawable/wow" />
+                tools:srcCompat="@drawable/ic_image_24" />
 
             <Button
-                android:id="@+id/btnLostFoundImage"
-                android:layout_width="wrap_content"
+                android:id="@+id/btnLostFoundManageCamera"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Upload Gambar"
-                android:backgroundTint="#4e136e"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                android:text="Camera"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivSelectedImage" />
+
+            <Button
+                android:id="@+id/btnLostFoundManageGallery"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:text="Gallery"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ivSelectedImage" />
 
             <EditText
@@ -127,7 +136,7 @@
                 android:id="@+id/btnLostFoundManageSave"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="88dp"
                 android:backgroundTint="#4e136e"
                 android:text="Simpan"
                 android:textSize="14sp"
@@ -135,7 +144,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnLostFoundImage" />
+                app:layout_constraintTop_toBottomOf="@+id/ivSelectedImage" />
 
             <ProgressBar
                 android:id="@+id/pbLostFoundManage"
