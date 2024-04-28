@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.ifs21038.lostfounds.data.remote.retrofit.IApiService
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
+import okhttp3.MultipartBody
 
 class LostFoundRepository private constructor(
     private val apiService: IApiService,
@@ -133,6 +134,27 @@ class LostFoundRepository private constructor(
                     apiService.deleteLostFound(lostfoundId)
                 )
             )
+        } catch (e: HttpException) {
+            //get error message
+            val jsonInString = e.response()?.errorBody()?.string()
+            emit(
+                MyResult.Error(
+                    Gson()
+                        .fromJson(jsonInString, DelcomResponse::class.java)
+                        .message
+                )
+            )
+        }
+    }
+
+    fun addCoverLostFound(
+        lostfoundId: Int,
+        cover: MultipartBody.Part,
+    ) = flow {
+        emit(MyResult.Loading)
+        try {
+            //get success message
+            emit(MyResult.Success(apiService.addCoverLostFound(lostfoundId, cover)))
         } catch (e: HttpException) {
             //get error message
             val jsonInString = e.response()?.errorBody()?.string()

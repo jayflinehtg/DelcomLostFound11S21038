@@ -74,7 +74,7 @@ interface IApiService {
 
     @Multipart
     @POST("todos/{id}/cover")
-    suspend fun addCoverTodo(
+    suspend fun addCoverLostFound(
         @Path("id") todoId: Int,
         @Part cover: MultipartBody.Part,
     ): DelcomResponse
