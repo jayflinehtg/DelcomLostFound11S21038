@@ -33,8 +33,12 @@ class MainViewModel(
         return lostfoundRepository.getLostFounds(null, 1, null).asLiveData()
     }
 
-    fun getLostFounds(): LiveData<MyResult<DelcomLostFoundsResponse>> {
-        return lostfoundRepository.getLostFounds(null,0,null).asLiveData()
+    fun getLostFounds(
+        isCompleted: Int?,
+        isMe: Int?,
+        status: String?,
+    ): LiveData<MyResult<DelcomLostFoundsResponse>> {
+        return lostfoundRepository.getLostFounds(isCompleted, isMe, status).asLiveData()
     }
 
     fun putLostFound(

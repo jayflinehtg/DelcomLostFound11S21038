@@ -18,6 +18,7 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -71,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             ContextCompat
                 .getDrawable(this, R.drawable.ic_more_vert_24)
 
-        observeGetLostFounds()
+        observeGetLostFounds(null, null, null)
     }
 
     private fun setupAction() {
@@ -88,11 +89,6 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.mainMenuAllData -> {
-                    // Ketika menu "All Data" diklik, panggil fungsi getLostandFounds()
-                    observeGetLostFounds()
-                    true
-                }
                 R.id.mainMenuMyData -> {
                     // Ketika menu "My Data" diklik, panggil fungsi getLostandFound()
                     observeGetMyLostFounds()
@@ -104,9 +100,62 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
+                R.id.filter ->{
+                    val checkedItems = booleanArrayOf(false, false, false, false, false)
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+                    builder
+                        .setTitle("Pilih item-item yang ingin ditampilkan")
+                        .setPositiveButton("Pilih") { dialog, which ->
+                            val saya = if (checkedItems[0]) 1 else null
+
+                            val lostorfound: String? = if(checkedItems[1]) {
+                                if(checkedItems[2]) {
+                                    null
+                                } else {
+                                    "Lost"
+                                }
+                            } else {
+                                if(checkedItems[2]) {
+                                    "Found"
+                                } else {
+                                    null
+                                }
+                            }
+
+                            val status: Int? = if(checkedItems[3]) {
+                                if(checkedItems[4]) {
+                                    null
+                                } else {
+                                    1
+                                }
+                            } else {
+                                if(checkedItems[4]) {
+                                    0
+                                } else {
+                                    null
+                                }
+                            }
+
+                            observeGetLostFounds(status, saya, lostorfound)
+                        }
+                        .setNegativeButton("Batal") { dialog, which ->
+                            // Do something else.
+                        }
+                        .setMultiChoiceItems(
+                            arrayOf("Item Saya", "Lost", "Found", "Completed", "Incompleted"), checkedItems) { dialog, which, isChecked ->
+                            checkedItems[which] = isChecked
+                        }
+
+//                        Log.d("CheckedItemsDump", "Checked items: ${checkedItems.contentToString()}")
+
+                    val dialog: AlertDialog = builder.create()
+                    dialog.show()
+                    true
+                }
                 else -> false
             }
         }
+
 
         binding.fabMainAddLostFound.setOnClickListener {
             openAddLostFoundActivity()
@@ -116,13 +165,17 @@ class MainActivity : AppCompatActivity() {
             if (!user.isLogin) {
                 openLoginActivity()
             } else {
-                observeGetLostFounds()
+                // Load Lost-Founds
             }
         }
     }
 
-    private fun observeGetLostFounds() {
-        viewModel.getLostFounds().observe(this) { result ->
+    private fun observeGetLostFounds(
+        isCompleted: Int?,
+        isMe: Int?,
+        status: String?
+    ) {
+        viewModel.getLostFounds(isCompleted,isMe,status).observe(this) { result ->
             if (result != null) {
                 when (result) {
                     is MyResult.Loading -> {
@@ -131,7 +184,7 @@ class MainActivity : AppCompatActivity() {
 
                     is MyResult.Success -> {
                         showLoading(false)
-                        loadLostFoundsToLayout(result.data)
+                        loadAllToLayout(result.data)
                     }
 
                     is MyResult.Error -> {
@@ -142,6 +195,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
 
     private fun observeGetMyLostFounds() {
         // Panggil fungsi getLostandFounds() dengan menyertakan nilai isMe
@@ -270,6 +325,118 @@ class MainActivity : AppCompatActivity() {
                         return true
                     }
                 })
+        }
+    }
+
+    private fun loadAllToLayout(response: DelcomLostFoundsResponse) {
+        // Periksa apakah response atau data pada response null
+        if (response == null) {
+            // Handle null case appropriately, misalnya menampilkan pesan error atau melakukan tindakan lainnya
+            Log.e("MainActivity", "response == null")
+            return
+        } else if (response.data == null){
+            Log.e("MainActivity", "response.data == null")
+            return
+        } else if (response.data.lostFounds == null){
+            Log.e("MainActivity", "response.data.todos == null")
+            return
+        }
+
+        // Lanjutkan dengan pemrosesan data
+        val todos = response.data.lostFounds
+        val layoutManager = LinearLayoutManager(this)
+        binding.rvMainLostFounds.layoutManager = layoutManager
+        val itemDecoration = DividerItemDecoration(
+            this,
+            layoutManager.orientation
+        )
+        binding.rvMainLostFounds.addItemDecoration(itemDecoration)
+
+        if (todos.isEmpty()) {
+            showEmptyError(true)
+            binding.rvMainLostFounds.adapter = null
+        } else {
+            showComponentNotEmpty(true)
+            showEmptyError(false)
+
+            val adapter = LostFoundsAdapter()
+            adapter.submitOriginalList(todos)
+            binding.rvMainLostFounds.adapter = adapter
+            adapter.setOnItemClickCallback(object : LostFoundsAdapter.OnItemClickCallback {
+                override fun onCheckedChangeListener(
+                    todo: LostFoundsItemResponse,
+                    isChecked: Boolean
+                ) {
+                    adapter.filter(binding.svMain.query.toString())
+
+                    viewModel.putLostFound(
+                        todo.id,
+                        todo.title,
+                        todo.description,
+                        todo.status,
+                        isChecked
+                    ).observeOnce {
+                        when (it) {
+                            is MyResult.Error -> {
+                                if (isChecked) {
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        "Gagal menyelesaikan Lost And Found: " + todo.title,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        "Gagal menyelesaikan Lost And Found: " + todo.title,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+
+                            is MyResult.Success<*> -> {
+                                if (isChecked) {
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        "Berhasil menyelesaikan Lost And Found: " + todo.title,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        "Berhasil batal menyelesaikan Lost And Found: " + todo.title,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+
+                            else -> {}
+                        }
+                    }
+                }
+
+                override fun onClickDetailListener(todoId: Int) {
+                    val intent = Intent(
+                        this@MainActivity,
+                        LostFoundDetailActivity::class.java
+                    )
+                    intent.putExtra(LostFoundDetailActivity.KEY_LOST_FOUND_ID, todoId)
+                    launcher.launch(intent)
+                }
+            })
+
+            binding.svMain.setOnQueryTextListener(
+                object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String): Boolean {
+                        return false
+                    }
+
+                    override fun onQueryTextChange(newText: String): Boolean {
+                        adapter.filter(newText)
+                        binding.rvMainLostFounds.layoutManager?.scrollToPosition(0)
+                        return true
+                    }
+                }
+            )
         }
     }
 

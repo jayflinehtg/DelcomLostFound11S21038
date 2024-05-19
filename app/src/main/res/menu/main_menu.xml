@@ -11,10 +11,6 @@
             android:title="Logout"
             app:showAsAction="never" />
         <item
-            android:id="@+id/mainMenuAllData"
-            android:title="All Data"
-            app:showAsAction="never" />
-        <item
             android:id="@+id/mainMenuMyData"
             android:title="My Data"
             app:showAsAction="never" />
@@ -23,4 +19,13 @@
             android:title="Favorite Lost &amp; Found"
             app:showAsAction="never" />
     </group>
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/filter_list_svgrepo_com"
+        android:title="Item"
+        android:id="@+id/filter"
+        app:tint="@color/white"
+        app:showAsAction="ifRoom"
+        />
 </menu>
