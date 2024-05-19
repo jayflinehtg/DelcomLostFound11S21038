@@ -89,12 +89,6 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.mainMenuMyData -> {
-                    // Ketika menu "My Data" diklik, panggil fungsi getLostandFound()
-                    observeGetMyLostFounds()
-                    true
-                }
-
                 R.id.mainMenuFavoriteTodos -> {
                     openFavoriteLostFoundActivity()
                     true

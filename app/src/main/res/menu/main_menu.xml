@@ -11,10 +11,6 @@
             android:title="Logout"
             app:showAsAction="never" />
         <item
-            android:id="@+id/mainMenuMyData"
-            android:title="My Data"
-            app:showAsAction="never" />
-        <item
             android:id="@+id/mainMenuFavoriteTodos"
             android:title="Favorite Lost &amp; Found"
             app:showAsAction="never" />
